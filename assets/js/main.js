@@ -9,30 +9,40 @@
   const isTouch = window.matchMedia('(hover:none),(pointer:coarse)').matches;
   const $  = (s, c) => (c || document).querySelector(s);
   const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+  const lerp = (a, b, t) => a + (b - a) * t;
 
-  /* ---------- Preloader ---------- */
-  window.addEventListener('load', () => {
-    setTimeout(() => document.body.classList.add('loaded'), 600);
-  });
-  // safety net in case load is slow
-  setTimeout(() => document.body.classList.add('loaded'), 2600);
+  /* ---------- Preloader (with % counter) ---------- */
+  const pct = $('.preloader__pct');
+  if (pct) {
+    let n = 0;
+    const t = setInterval(() => {
+      n = Math.min(100, n + Math.random() * 14);
+      pct.textContent = Math.round(n) + '%';
+      if (n >= 100) clearInterval(t);
+    }, 130);
+  }
+  window.addEventListener('load', () => setTimeout(() => document.body.classList.add('loaded'), 650));
+  setTimeout(() => document.body.classList.add('loaded'), 2800);
 
-  /* ---------- Header on scroll + active nav ---------- */
+  /* ---------- Scroll progress bar ---------- */
+  const progress = document.createElement('div');
+  progress.className = 'scroll-progress';
+  document.body.appendChild(progress);
+
+  /* ---------- Header / active nav / progress ---------- */
   const header = $('.header');
   const sections = $$('section[id]');
   const navLinks = $$('.nav a[href^="#"]');
-
   function onScroll() {
     const y = window.scrollY;
     if (header) header.classList.toggle('scrolled', y > 60);
 
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = (docH > 0 ? (y / docH) * 100 : 0) + '%';
+
     let current = '';
-    sections.forEach((sec) => {
-      if (y >= sec.offsetTop - 140) current = sec.id;
-    });
-    navLinks.forEach((l) =>
-      l.classList.toggle('active', l.getAttribute('href') === '#' + current)
-    );
+    sections.forEach((sec) => { if (y >= sec.offsetTop - 160) current = sec.id; });
+    navLinks.forEach((l) => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
 
     const toTop = $('.to-top');
     if (toTop) toTop.classList.toggle('show', y > 700);
@@ -42,148 +52,159 @@
 
   /* ---------- Mobile menu ---------- */
   const burger = $('.burger');
-  const closeMenu = () => {
-    document.body.classList.remove('menu-open', 'is-locked');
-  };
-  if (burger) {
-    burger.addEventListener('click', () => {
-      const open = document.body.classList.toggle('menu-open');
-      document.body.classList.toggle('is-locked', open);
-    });
-  }
+  const closeMenu = () => document.body.classList.remove('menu-open', 'is-locked');
+  if (burger) burger.addEventListener('click', () => {
+    const open = document.body.classList.toggle('menu-open');
+    document.body.classList.toggle('is-locked', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
   $$('.mobile-menu a').forEach((a) => a.addEventListener('click', closeMenu));
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeMenu();
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+
+  /* ---------- Split text into words ---------- */
+  $$('.split-text').forEach((el) => {
+    if (el.dataset.split) return;
+    el.dataset.split = '1';
+    const words = el.textContent.trim().split(/\s+/);
+    el.innerHTML = words.map((w) => `<span class="word"><i>${w}</i></span>`).join(' ');
+    $$('.word > i', el).forEach((i, idx) => (i.style.transitionDelay = idx * 0.055 + 's'));
+  });
+
+  /* ---------- Stagger children reveal ---------- */
+  $$('[data-stagger]').forEach((box) => {
+    Array.from(box.children).forEach((ch, i) => {
+      ch.style.transitionDelay = (i % 12) * 0.07 + 's';
+    });
   });
 
   /* ---------- Reveal on scroll ---------- */
-  const revealEls = $$('[data-reveal], .split-text');
+  const revealEls = $$('[data-reveal], .split-text, .reveal-img, .gallery figure, .rule, .eyebrow');
   if ('IntersectionObserver' in window && !reduceMotion) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((en) => {
-          if (en.isIntersecting) {
-            en.target.classList.add('in-view');
-            io.unobserve(en.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
-    );
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting) { en.target.classList.add('in-view'); io.unobserve(en.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
     revealEls.forEach((el) => io.observe(el));
   } else {
     revealEls.forEach((el) => el.classList.add('in-view'));
   }
 
-  /* ---------- Split text into words (for masthead reveals) ---------- */
-  $$('.split-text').forEach((el) => {
-    if (el.dataset.split) return;
-    el.dataset.split = '1';
-    const words = el.textContent.trim().split(/\s+/);
-    el.innerHTML = words
-      .map((w) => `<span class="word"><i>${w}</i></span>`)
-      .join(' ');
-    $$('.word > i', el).forEach((i, idx) => {
-      i.style.transitionDelay = idx * 0.05 + 's';
-    });
-  });
-
   /* ---------- Counters ---------- */
   function animateCount(el) {
     const target = parseFloat(el.dataset.count);
-    const dur = 1600;
-    const dec = (el.dataset.count.split('.')[1] || '').length;
+    const dur = 1700;
     const start = performance.now();
-    function tick(now) {
+    (function tick(now) {
       const p = Math.min((now - start) / dur, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      const val = target * eased;
-      el.textContent = dec
-        ? val.toFixed(dec)
-        : Math.round(val).toLocaleString('ru-RU');
+      const val = target * (1 - Math.pow(1 - p, 3));
+      el.textContent = Math.round(val).toLocaleString('ru-RU');
       if (p < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
+    })(start);
   }
-  const counters = $$('[data-count]');
   if ('IntersectionObserver' in window) {
-    const cio = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((en) => {
-          if (en.isIntersecting) {
-            if (!reduceMotion) animateCount(en.target);
-            else en.target.textContent = parseFloat(en.target.dataset.count).toLocaleString('ru-RU');
-            cio.unobserve(en.target);
-          }
-        });
-      },
-      { threshold: 0.6 }
-    );
-    counters.forEach((c) => cio.observe(c));
+    const cio = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting) {
+          if (!reduceMotion) animateCount(en.target);
+          else en.target.textContent = parseFloat(en.target.dataset.count).toLocaleString('ru-RU');
+          cio.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.6 });
+    $$('[data-count]').forEach((c) => cio.observe(c));
   }
 
   /* ---------- Hero slideshow ---------- */
   const slides = $$('.hero__slide');
   const dots = $$('.hero__dots button');
-  let idx = 0;
-  let heroTimer;
+  let idx = 0, heroTimer;
   function showSlide(n) {
     slides.forEach((s, i) => s.classList.toggle('active', i === n));
     dots.forEach((d, i) => d.classList.toggle('active', i === n));
     idx = n;
   }
-  function nextSlide() {
-    showSlide((idx + 1) % slides.length);
-  }
   function startHero() {
     if (slides.length > 1 && !reduceMotion) {
       clearInterval(heroTimer);
-      heroTimer = setInterval(nextSlide, 6000);
+      heroTimer = setInterval(() => showSlide((idx + 1) % slides.length), 6000);
     }
   }
-  dots.forEach((d, i) =>
-    d.addEventListener('click', () => {
-      showSlide(i);
-      startHero();
-    })
-  );
-  if (slides.length) {
-    showSlide(0);
-    startHero();
+  dots.forEach((d, i) => d.addEventListener('click', () => { showSlide(i); startHero(); }));
+  if (slides.length) { showSlide(0); startHero(); }
+
+  /* ---------- Hero mouse parallax ---------- */
+  const hero = $('.hero');
+  const heroContent = $('.hero__content');
+  const heroSlides = $('.hero__slides');
+  if (hero && !isTouch && !reduceMotion) {
+    hero.addEventListener('mousemove', (e) => {
+      const cx = (e.clientX / window.innerWidth - 0.5);
+      const cy = (e.clientY / window.innerHeight - 0.5);
+      if (heroSlides) heroSlides.style.transform = `translate(${cx * 18}px, ${cy * 18}px)`;
+      if (heroContent) heroContent.style.transform = `translate(${cx * -12}px, ${cy * -8}px)`;
+    });
+    hero.addEventListener('mouseleave', () => {
+      if (heroSlides) heroSlides.style.transform = '';
+      if (heroContent) heroContent.style.transform = '';
+    });
   }
 
-  /* ---------- Parallax ---------- */
+  /* ---------- Parallax on scroll ---------- */
   const parallaxEls = $$('.parallax');
-  if (parallaxEls.length && !reduceMotion && !isTouch) {
+  if ((parallaxEls.length) && !reduceMotion && !isTouch) {
     let ticking = false;
-    window.addEventListener(
-      'scroll',
-      () => {
-        if (!ticking) {
-          window.requestAnimationFrame(() => {
-            const vh = window.innerHeight;
-            parallaxEls.forEach((el) => {
-              const r = el.getBoundingClientRect();
-              if (r.bottom > 0 && r.top < vh) {
-                const speed = parseFloat(el.dataset.speed || 0.12);
-                const offset = (r.top + r.height / 2 - vh / 2) * -speed;
-                el.style.transform = `translateY(${offset.toFixed(1)}px)`;
-              }
-            });
-            ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const vh = window.innerHeight;
+          parallaxEls.forEach((el) => {
+            const r = el.getBoundingClientRect();
+            if (r.bottom > 0 && r.top < vh) {
+              const speed = parseFloat(el.dataset.speed || 0.12);
+              const offset = (r.top + r.height / 2 - vh / 2) * -speed;
+              el.style.transform = `translateY(${offset.toFixed(1)}px)`;
+            }
           });
-          ticking = true;
-        }
-      },
-      { passive: true }
-    );
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
   }
 
-  /* ---------- Custom cursor ---------- */
+  /* ---------- 3D tilt on cards ---------- */
+  if (!isTouch && !reduceMotion) {
+    $$('.dir-card').forEach((card) => {
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = `perspective(900px) rotateY(${px * 6}deg) rotateX(${py * -6}deg) translateY(-4px)`;
+      });
+      card.addEventListener('mouseleave', () => (card.style.transform = ''));
+    });
+  }
+
+  /* ---------- Magnetic buttons ---------- */
+  if (!isTouch && !reduceMotion) {
+    $$('.btn, .magnetic').forEach((el) => {
+      el.addEventListener('mousemove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2;
+        const y = e.clientY - r.top - r.height / 2;
+        el.style.transform = `translate(${x * 0.25}px, ${y * 0.35}px)`;
+      });
+      el.addEventListener('mouseleave', () => (el.style.transform = ''));
+    });
+  }
+
+  /* ---------- Custom cursor with label ---------- */
   if (!isTouch && !reduceMotion) {
     const ring = document.createElement('div');
     const dot = document.createElement('div');
     ring.className = 'cursor';
+    ring.innerHTML = '<span class="cursor__label">Смотреть</span>';
     dot.className = 'cursor-dot';
     document.body.appendChild(ring);
     document.body.appendChild(dot);
@@ -195,18 +216,19 @@
       dot.style.transform = `translate(${dx}px,${dy}px) translate(-50%,-50%)`;
     });
     (function loop() {
-      rx += (dx - rx) * 0.18;
-      ry += (dy - ry) * 0.18;
+      rx = lerp(rx, dx, 0.2); ry = lerp(ry, dy, 0.2);
       ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
       requestAnimationFrame(loop);
     })();
 
-    const hov = 'a, button, .gallery figure, .dir-card, input, textarea, .socials a';
+    const hov = 'a, button, input, textarea, .socials a';
     document.addEventListener('mouseover', (e) => {
-      if (e.target.closest(hov)) ring.classList.add('is-hover');
+      if (e.target.closest('.gallery figure')) ring.classList.add('is-view');
+      else if (e.target.closest(hov)) ring.classList.add('is-hover');
     });
     document.addEventListener('mouseout', (e) => {
-      if (e.target.closest(hov)) ring.classList.remove('is-hover');
+      if (e.target.closest('.gallery figure')) ring.classList.remove('is-view');
+      else if (e.target.closest(hov)) ring.classList.remove('is-hover');
     });
     window.addEventListener('mousedown', () => ring.classList.add('is-down'));
     window.addEventListener('mouseup', () => ring.classList.remove('is-down'));
@@ -232,21 +254,12 @@
     });
     let cur = 0;
     function open(i) {
-      cur = i;
-      lbImg.src = imgs[i].src;
-      lbImg.alt = imgs[i].cap;
+      cur = i; lbImg.src = imgs[i].src; lbImg.alt = imgs[i].cap;
       lbCount.textContent = `${i + 1} / ${imgs.length}`;
-      lb.classList.add('open');
-      document.body.classList.add('is-locked');
+      lb.classList.add('open'); document.body.classList.add('is-locked');
     }
-    function close() {
-      lb.classList.remove('open');
-      document.body.classList.remove('is-locked');
-    }
-    function go(d) {
-      cur = (cur + d + imgs.length) % imgs.length;
-      open(cur);
-    }
+    function close() { lb.classList.remove('open'); document.body.classList.remove('is-locked'); }
+    function go(d) { cur = (cur + d + imgs.length) % imgs.length; open(cur); }
     figures.forEach((f, i) => f.addEventListener('click', () => open(i)));
     $('.lightbox__close', lb).addEventListener('click', close);
     $('.lightbox__nav.prev', lb).addEventListener('click', (e) => { e.stopPropagation(); go(-1); });
@@ -258,7 +271,6 @@
       if (e.key === 'ArrowLeft') go(-1);
       if (e.key === 'ArrowRight') go(1);
     });
-    // swipe
     let sx = 0;
     lb.addEventListener('touchstart', (e) => (sx = e.touches[0].clientX), { passive: true });
     lb.addEventListener('touchend', (e) => {
@@ -267,35 +279,15 @@
     });
   }
 
-  /* ---------- Callback form (front-end only; ready to wire to CRM) ---------- */
+  /* ---------- Callback form ---------- */
   const form = $('#callback-form');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const success = $('#form-success');
-      form.querySelector('.card-form__body').style.display = 'none';
-      if (success) success.classList.add('show');
-      // TODO: интеграция с CRM / отправка заявки (зарезервировано брифом)
-    });
-  }
-
-  /* ---------- Lazy-load full images from thumbs ---------- */
-  $$('img[data-src]').forEach((img) => {
-    if ('IntersectionObserver' in window) {
-      const lio = new IntersectionObserver((entries, ob) => {
-        entries.forEach((en) => {
-          if (en.isIntersecting) {
-            const t = en.target;
-            t.src = t.dataset.src;
-            t.removeAttribute('data-src');
-            ob.unobserve(t);
-          }
-        });
-      }, { rootMargin: '200px' });
-      lio.observe(img);
-    } else {
-      img.src = img.dataset.src;
-    }
+  if (form) form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const success = $('#form-success');
+    const body = form.querySelector('.card-form__body');
+    if (body) body.style.display = 'none';
+    if (success) success.classList.add('show');
+    // TODO: подключить отправку заявки в CRM / на e-mail
   });
 
   /* ---------- Current year ---------- */

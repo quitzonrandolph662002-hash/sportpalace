@@ -16,7 +16,7 @@
 <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/img/hero-1.jpg">
 <link rel="stylesheet" href="assets/css/style.css">
 <script type="application/ld+json">
@@ -37,22 +37,18 @@
 </head>
 <body>
 
-<!-- ===== Reusable laurel emblem ===== -->
+<!-- ===== Brand olive sprig (как в фирменном логотипе) ===== -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="laurel" viewBox="0 0 60 76">
-    <path d="M30 74 V18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+  <symbol id="sprig" viewBox="0 0 52 56">
+    <path d="M26 55 C 23.5 43 24.5 30 28.5 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
     <g fill="currentColor">
-      <g transform="translate(30,60) rotate(-52)"><path d="M0 0 C-5 -4 -5 -12 0 -16 C5 -12 5 -4 0 0 Z"/></g>
-      <g transform="translate(30,60) rotate(52)"><path d="M0 0 C-5 -4 -5 -12 0 -16 C5 -12 5 -4 0 0 Z"/></g>
-      <g transform="translate(30,51) rotate(-49) scale(.95)"><path d="M0 0 C-5 -4 -5 -12 0 -16 C5 -12 5 -4 0 0 Z"/></g>
-      <g transform="translate(30,51) rotate(49) scale(.95)"><path d="M0 0 C-5 -4 -5 -12 0 -16 C5 -12 5 -4 0 0 Z"/></g>
-      <g transform="translate(30,42) rotate(-45) scale(.87)"><path d="M0 0 C-5 -4 -5 -12 0 -16 C5 -12 5 -4 0 0 Z"/></g>
-      <g transform="translate(30,42) rotate(45) scale(.87)"><path d="M0 0 C-5 -4 -5 -12 0 -16 C5 -12 5 -4 0 0 Z"/></g>
-      <g transform="translate(30,33) rotate(-40) scale(.77)"><path d="M0 0 C-5 -4 -5 -12 0 -16 C5 -12 5 -4 0 0 Z"/></g>
-      <g transform="translate(30,33) rotate(40) scale(.77)"><path d="M0 0 C-5 -4 -5 -12 0 -16 C5 -12 5 -4 0 0 Z"/></g>
-      <g transform="translate(30,25) rotate(-34) scale(.66)"><path d="M0 0 C-5 -4 -5 -12 0 -16 C5 -12 5 -4 0 0 Z"/></g>
-      <g transform="translate(30,25) rotate(34) scale(.66)"><path d="M0 0 C-5 -4 -5 -12 0 -16 C5 -12 5 -4 0 0 Z"/></g>
-      <circle cx="30" cy="15" r="2.6"/>
+      <g transform="translate(24.6,46) rotate(-46)"><path d="M0 0 C 2.6 -3 2.6 -9.5 0 -13.5 C -2.6 -9.5 -2.6 -3 0 0 Z"/></g>
+      <g transform="translate(25.7,46) rotate(48)"><path d="M0 0 C 2.6 -3 2.6 -9.5 0 -13.5 C -2.6 -9.5 -2.6 -3 0 0 Z"/></g>
+      <g transform="translate(25.3,37) rotate(-42) scale(.94)"><path d="M0 0 C 2.6 -3 2.6 -9.5 0 -13.5 C -2.6 -9.5 -2.6 -3 0 0 Z"/></g>
+      <g transform="translate(26.7,37) rotate(44) scale(.94)"><path d="M0 0 C 2.6 -3 2.6 -9.5 0 -13.5 C -2.6 -9.5 -2.6 -3 0 0 Z"/></g>
+      <g transform="translate(26.6,28.5) rotate(-37) scale(.85)"><path d="M0 0 C 2.6 -3 2.6 -9.5 0 -13.5 C -2.6 -9.5 -2.6 -3 0 0 Z"/></g>
+      <g transform="translate(27.9,28.5) rotate(39) scale(.85)"><path d="M0 0 C 2.6 -3 2.6 -9.5 0 -13.5 C -2.6 -9.5 -2.6 -3 0 0 Z"/></g>
+      <g transform="translate(28.4,18) rotate(4) scale(.8)"><path d="M0 0 C 2.6 -3 2.6 -9.5 0 -13.5 C -2.6 -9.5 -2.6 -3 0 0 Z"/></g>
     </g>
   </symbol>
 </svg>
@@ -60,19 +56,20 @@
 <!-- ===== Preloader ===== -->
 <div class="preloader" aria-hidden="true">
   <div class="preloader__inner">
-    <svg class="preloader__logo" viewBox="0 0 60 76">
-      <path pathLength="1" d="M30 74 V18"/>
-      <path pathLength="1" d="M30 60 C19 56 19 47 24 44"/>
-      <path pathLength="1" d="M30 60 C41 56 41 47 36 44"/>
-      <path pathLength="1" d="M30 50 C20 46 21 38 25 36"/>
-      <path pathLength="1" d="M30 50 C40 46 39 38 35 36"/>
-      <path pathLength="1" d="M30 41 C22 38 22 31 26 29"/>
-      <path pathLength="1" d="M30 41 C38 38 38 31 34 29"/>
-      <path pathLength="1" d="M30 32 C24 30 24 24 27 23"/>
-      <path pathLength="1" d="M30 32 C36 30 36 24 33 23"/>
+    <svg class="preloader__logo" viewBox="0 0 52 56">
+      <path pathLength="1" d="M26 55 C 23.5 43 24.5 30 28.5 16"/>
+      <path pathLength="1" d="M0 0 C 2.6 -3 2.6 -9.5 0 -13.5 C -2.6 -9.5 -2.6 -3 0 0 Z" transform="translate(24.6,46) rotate(-46)"/>
+      <path pathLength="1" d="M0 0 C 2.6 -3 2.6 -9.5 0 -13.5 C -2.6 -9.5 -2.6 -3 0 0 Z" transform="translate(25.7,46) rotate(48)"/>
+      <path pathLength="1" d="M0 0 C 2.6 -3 2.6 -9.5 0 -13.5 C -2.6 -9.5 -2.6 -3 0 0 Z" transform="translate(25.3,37) rotate(-42) scale(.94)"/>
+      <path pathLength="1" d="M0 0 C 2.6 -3 2.6 -9.5 0 -13.5 C -2.6 -9.5 -2.6 -3 0 0 Z" transform="translate(26.7,37) rotate(44) scale(.94)"/>
+      <path pathLength="1" d="M0 0 C 2.6 -3 2.6 -9.5 0 -13.5 C -2.6 -9.5 -2.6 -3 0 0 Z" transform="translate(26.6,28.5) rotate(-37) scale(.85)"/>
+      <path pathLength="1" d="M0 0 C 2.6 -3 2.6 -9.5 0 -13.5 C -2.6 -9.5 -2.6 -3 0 0 Z" transform="translate(27.9,28.5) rotate(39) scale(.85)"/>
+      <path pathLength="1" d="M0 0 C 2.6 -3 2.6 -9.5 0 -13.5 C -2.6 -9.5 -2.6 -3 0 0 Z" transform="translate(28.4,18) rotate(4) scale(.8)"/>
     </svg>
     <div class="preloader__name">Grand Palace Sport</div>
+    <div class="preloader__sub">Спортивный клуб</div>
     <div class="preloader__bar"><i></i></div>
+    <div class="preloader__pct">0%</div>
   </div>
 </div>
 
@@ -80,11 +77,10 @@
 <header class="header">
   <div class="container header__inner">
     <a href="#top" class="logo on-dark" aria-label="Гранд-Палас Спорт — на главную">
-      <svg class="logo__mark" viewBox="0 0 60 76" aria-hidden="true"><use href="#laurel"/></svg>
-      <span class="logo__text">
-        <span class="logo__name">GRAND PALACE</span>
-        <span class="logo__sub">Спортивный клуб</span>
-      </span>
+      <svg class="logo__sprig" viewBox="0 0 52 56" aria-hidden="true"><use href="#sprig"/></svg>
+      <span class="logo__word">GRAND PALACE SPORT</span>
+      <span class="logo__line"></span>
+      <span class="logo__sub">Спортивный клуб</span>
     </a>
 
     <nav class="nav on-dark" aria-label="Основная навигация">
@@ -183,7 +179,9 @@
 <section class="section" id="about">
   <div class="container split">
     <div class="split__media media media--frame" data-reveal="left">
-      <img src="assets/img/pilates-1.jpg" alt="Зал студии пилатеса с логотипом Grand Palace Sport на стене">
+      <div class="reveal-img">
+        <img src="assets/img/pilates-1.jpg" alt="Зал студии пилатеса с логотипом Grand Palace Sport на стене">
+      </div>
       <div class="media__badge">
         <span class="num">с&nbsp;2010</span>
         <small>года в&nbsp;спорте</small>
@@ -247,7 +245,7 @@
     <div class="dir-grid">
       <article class="dir-card span-7 tall" data-reveal="scale">
         <span class="dir-card__tag">Новое направление</span>
-        <img src="assets/img/pilates-2.jpg" alt="Студия пилатеса Grand Palace Sport">
+        <div class="dir-card__img"><img src="assets/img/pilates-2.jpg" alt="Студия пилатеса Grand Palace Sport"></div>
         <div class="dir-card__body">
           <span class="dir-card__num">01</span>
           <h3>Студия пилатеса</h3>
@@ -257,7 +255,7 @@
       </article>
 
       <article class="dir-card span-5 tall" data-reveal="scale" data-reveal-delay="1">
-        <img src="assets/img/hero-4.jpg" alt="Тренажёрный зал">
+        <div class="dir-card__img"><img src="assets/img/hero-4.jpg" alt="Тренажёрный зал"></div>
         <div class="dir-card__body">
           <span class="dir-card__num">02</span>
           <h3>Тренажёрный зал</h3>
@@ -266,7 +264,7 @@
       </article>
 
       <article class="dir-card span-4" data-reveal="scale">
-        <img src="assets/img/lounge-2.jpg" alt="Теннисные корты">
+        <div class="dir-card__img"><img src="assets/img/lounge-2.jpg" alt="Теннисные корты"></div>
         <div class="dir-card__body">
           <span class="dir-card__num">03</span>
           <h3>Теннисные корты</h3>
@@ -275,7 +273,7 @@
       </article>
 
       <article class="dir-card span-4" data-reveal="scale" data-reveal-delay="1">
-        <img src="assets/img/lounge-1.jpg" alt="Бассейн">
+        <div class="dir-card__img"><img src="assets/img/lounge-1.jpg" alt="Бассейн"></div>
         <div class="dir-card__body">
           <span class="dir-card__num">04</span>
           <h3>Бассейн</h3>
@@ -284,7 +282,7 @@
       </article>
 
       <article class="dir-card span-4" data-reveal="scale" data-reveal-delay="2">
-        <img src="assets/img/storage-1.jpg" alt="Зона персональных тренировок">
+        <div class="dir-card__img"><img src="assets/img/storage-1.jpg" alt="Зона персональных тренировок"></div>
         <div class="dir-card__body">
           <span class="dir-card__num">05</span>
           <h3>Персональные тренировки</h3>
@@ -297,6 +295,8 @@
 
 <!-- ===== Pilates feature ===== -->
 <section class="section bg-sand pilates-hero" id="pilates">
+  <span class="orb orb--1"></span>
+  <span class="orb orb--2"></span>
   <div class="container">
     <div class="section-head" data-reveal>
       <span class="eyebrow">Приоритетное направление</span>
@@ -314,11 +314,11 @@
           <a href="#contacts" class="btn">Записаться на пилатес <span class="ico">&#8594;</span></a>
         </div>
       </div>
-      <div class="col-a parallax" data-speed="0.06">
-        <img src="assets/img/brand-gold.jpg" alt="Золотой логотип Grand Palace Sport на стене студии">
+      <div class="col-a parallax" data-speed="0.05">
+        <div class="reveal-img"><img src="assets/img/brand-gold.jpg" alt="Золотой логотип Grand Palace Sport на стене студии"></div>
       </div>
-      <div class="col-b parallax" data-speed="0.12">
-        <img src="assets/img/detail-2.jpg" alt="Аксессуары The Pilates Class">
+      <div class="col-b parallax" data-speed="0.13">
+        <div class="reveal-img"><img src="assets/img/detail-2.jpg" alt="Аксессуары The Pilates Class"></div>
       </div>
     </div>
   </div>
@@ -333,7 +333,7 @@
       <p class="lead" data-reveal data-reveal-delay="1">Реальные интерьеры клуба. Нажмите на снимок, чтобы рассмотреть детали.</p>
     </div>
 
-    <div class="gallery" data-reveal>
+    <div class="gallery" data-stagger>
       <figure><img src="assets/img/pilates-3-thumb.jpg" data-full="assets/img/pilates-3.jpg" alt="Зал пилатеса с логотипом"><figcaption>Студия пилатеса</figcaption><span class="plus">+</span></figure>
       <figure><img src="assets/img/pilates-6-thumb.jpg" data-full="assets/img/pilates-6.jpg" alt="Боди-барелы у панорамного окна"><figcaption>Боди-барел зона</figcaption><span class="plus">+</span></figure>
       <figure><img src="assets/img/brand-pilates-thumb.jpg" data-full="assets/img/brand-pilates.jpg" alt="Графика Pilates на стене"><figcaption>Pilates</figcaption><span class="plus">+</span></figure>
@@ -525,9 +525,11 @@
   <div class="container">
     <div class="footer__top">
       <div class="footer__col">
-        <a href="#top" class="logo" style="margin-bottom:1.2rem">
-          <svg class="logo__mark" viewBox="0 0 60 76" style="color:var(--gold-light)"><use href="#laurel"/></svg>
-          <span class="logo__text"><span class="logo__name" style="color:#fff">GRAND PALACE</span><span class="logo__sub">Спортивный клуб</span></span>
+        <a href="#top" class="logo" aria-label="Гранд-Палас Спорт">
+          <svg class="logo__sprig" viewBox="0 0 52 56" aria-hidden="true"><use href="#sprig"/></svg>
+          <span class="logo__word">GRAND PALACE SPORT</span>
+          <span class="logo__line"></span>
+          <span class="logo__sub">Спортивный клуб</span>
         </a>
         <p>Спортивный клуб премиум-класса во&nbsp;Всеволожске. Искусство быть в&nbsp;форме.</p>
       </div>
